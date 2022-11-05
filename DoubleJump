@@ -1,0 +1,45 @@
+//By StrumDev
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody))]
+public class PlayerMuvment : MonoBehaviour
+{
+    public float Speed = 5;
+    public float JumpStrength = 2f;
+    public GroundCheck groundCheck;
+    private int currentJump;
+     
+
+    private Rigidbody rig;
+
+    public int maxJump = 2;
+
+
+    private void Start()
+    {
+        rig = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        JumpEvent();
+    }
+
+    void FixedUpdate()
+    {
+
+        transform.Translate(Input.GetAxis("Horizontal") * Speed * Time.deltaTime, 0, Input.GetAxis("Vertical") * Speed * Time.deltaTime);
+    }
+
+    public void JumpEvent()
+    {
+        if (groundCheck.isGrounded)
+            currentJump = 0;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            currentJump++;
+            if (currentJump < maxJump || groundCheck.isGrounded)
+               rig.AddForce(Vector3.up * 100 * JumpStrength);
+       }
+   }
+}
